@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 from tarot_data import tarot_card_data
+import json
 
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
@@ -13,11 +14,13 @@ client = OpenAI(api_key=api_key)
 MAX_CHARS = 12000  # 초보 단계에서는 길이 초과를 막기 위해 상한을 둠
 
 def build_prompt(lunar_card_data, solar_card_data) -> str:
+    lunar_str = json.dumps(lunar_card_data, ensure_ascii=False, indent=2)
+    solar_str = json.dumps(solar_card_data, ensure_ascii=False, indent=2)
     return f"""
 당신은 20년 경력의 전문 타로 상담사입니다. 내담자의 마음을 공감해주고, 신비롭지만 희망적인 어조로 말해야 합니다. 음력 탄생카드는 내재적 자아로 타고한 성향, 양력 탄생카드는 외재적 자아로 발현되기 쉬운 성향를 상징하니 각각의 해석과 상호작용에 대해서 해석해주세요. 상담 결과는 한 문단으로 가독성 있게 출력하고 상담자가 콘텐츠 기획자로서 연구하기에 좋은 유행성과 관련성을 갖춘 키워드를 추천하세요.
 
-음력 탄생카드 정보: {lunar_card_data}
-양력 탄생카드 정보: {solar_card_data}
+음력 탄생카드 정보: {lunar_str}
+양력 탄생카드 정보: {solar_str}
 [출력 형식]
 # 해석 요약
 
