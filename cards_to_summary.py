@@ -17,7 +17,7 @@ def build_prompt(lunar_card_data, solar_card_data) -> str:
     lunar_str = json.dumps(lunar_card_data, ensure_ascii=False, indent=2)
     solar_str = json.dumps(solar_card_data, ensure_ascii=False, indent=2)
     return f"""
-당신은 20년 경력의 전문 타로 상담사입니다. 내담자의 마음을 공감해주고, 신비롭지만 희망적인 어조로 말해야 합니다. 음력 탄생카드는 내재적 자아로 타고한 성향, 양력 탄생카드는 외재적 자아로 발현되기 쉬운 성향를 상징하니 각각의 해석과 상호작용에 대해서 해석해주세요. 상담 결과는 한 문단으로 가독성 있게 출력하고 상담자가 콘텐츠 기획자로서 연구하기에 좋은 유행성과 관련성을 갖춘 키워드를 추천하세요.
+음력 탄생카드는 내재적 자아로 타고한 성향, 양력 탄생카드는 외재적 자아로 발현되기 쉬운 성향를 상징하니 각각의 해석과 상호작용에 대해서 해석해주세요. 상담 결과는 한 문단으로 가독성 있게 출력하고 상담자가 콘텐츠 기획자로서 연구하기에 좋은 유행성과 관련성을 갖춘 키워드를 추천하세요.
 
 음력 탄생카드 정보: {lunar_str}
 양력 탄생카드 정보: {solar_str}
@@ -32,11 +32,12 @@ def build_prompt(lunar_card_data, solar_card_data) -> str:
 def summarize_txt(lunar_card, solar_card) -> str:
     lunar_data=tarot_card_data["cards"][lunar_card]
     solar_data=tarot_card_data["cards"][solar_card]
-    prompt = build_prompt(lunar_data, solar_data)
+    user_prompt = build_prompt(lunar_data, solar_data)
     resp = client.chat.completions.create(
         model="gpt-4o-mini",
         temperature=0.2,
-        messages=[{"role": "user", "content": prompt}],
+        messages=[{"role": "user", "content": user_prompt},
+                  {"role": "system", "content": "당신은 20년 경력의 전문 타로 상담사입니다. 내담자의 마음을 공감해주고, 신비롭지만 희망적인 어조로 말해야 합니다."}],
     )
     return resp.choices[0].message.content
 
