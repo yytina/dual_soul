@@ -11,7 +11,7 @@ if not api_key:
 
 client = OpenAI(api_key=api_key)
 
-MAX_CHARS = 12000  # 초보 단계에서는 길이 초과를 막기 위해 상한을 둠
+MAX_CHARS = 12000  # 초보 단계에서는 길이 초과를 막기 위해 상한
 
 def build_prompt(lunar_card_data, solar_card_data) -> str:
     lunar_str = json.dumps(lunar_card_data, ensure_ascii=False, indent=2)
